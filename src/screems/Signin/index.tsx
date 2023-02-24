@@ -2,37 +2,82 @@ import React from 'react';
 import {
     View,
     Text,
-    TouchableOpacity,
     StyleSheet,
-    StatusBar,
     Dimensions,
+    TouchableOpacity,
+    Keyboard,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {SignInProps} from '../../routes';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
+
+import {StackProps} from '../../routes';
+
 import TextInput from '../../components/TextInput';
 
 export default function SignIn() {
-    const navigation = useNavigation<SignInProps>();
+    const navigation = useNavigation<StackProps>();
 
-    const goToDash = () => {
-        navigation.replace('Dashboard');
+    const initialValues = {email: '', pass: ''};
+
+    const SignInSchema = Yup.object().shape({
+        email: Yup.string()
+            .email('Formato de e-mail inválido')
+            .required('Campo obrigatório'),
+        pass: Yup.string()
+            .min(2, 'Too Short!')
+            .max(10, 'Too Long!')
+            .required('Required'),
+    });
+
+    const goToDash = (
+        params: typeof initialValues,
+        setSubmitting: (param: boolean) => void,
+    ) => {
+        Keyboard.dismiss();
+        setTimeout(() => {
+            setSubmitting(false);
+            console.log(params);
+        }, 5000);
+        //navigation.replace('Dashboard');
     };
 
     return (
-        <>
-            <StatusBar backgroundColor={'#ed145b'} />
-            <View style={styles.container}>
-                <Text style={styles.title}>Fiap</Text>
-                <TextInput
-                    placeholder="Digite seu e-mail"
-                    keyboardType="email-address"
-                />
-                <TextInput placeholder="digite sua senha" secureTextEntry />
-                <TouchableOpacity activeOpacity={0.7} style={styles.button}>
-                    <Text style={styles.buttonText}>Entrar</Text>
-                </TouchableOpacity>
-            </View>
-        </>
+        <Formik
+            initialValues={{email: '', pass: ''}}
+            onSubmit={(values, {setSubmitting}) =>
+                goToDash(values, setSubmitting)
+            }
+            validationSchema={SignInSchema}>
+            {({values, handleChange, handleSubmit, isSubmitting, errors}) => (
+                <View style={styles.container}>
+                    <Text style={styles.title}>FIAP</Text>
+                    <TextInput
+                        value={values.email}
+                        error={errors.email}
+                        onChangeText={handleChange('email')}
+                        placeholder="Digite seu e-mail"
+                        keyboardType="email-address"
+                    />
+                    <TextInput
+                        value={values.pass}
+                        error={errors.pass}
+                        onChangeText={handleChange('pass')}
+                        placeholder="Digite sua senha"
+                        secureTextEntry
+                    />
+                    <TouchableOpacity
+                        onPress={handleSubmit}
+                        activeOpacity={0.7}
+                        disabled={isSubmitting}
+                        style={styles.button}>
+                        <Text style={styles.buttonText}>
+                            {isSubmitting ? 'Carregando...' : 'Entrar'}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+        </Formik>
     );
 }
 
@@ -50,7 +95,7 @@ const styles = StyleSheet.create({
         marginBottom: 24,
     },
     button: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#FFFFFF',
         padding: 10,
         width: Dimensions.get('screen').width - 80,
         justifyContent: 'center',
@@ -58,7 +103,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     buttonText: {
-        color: '#ed145b',
+        color: '#be0e49',
         fontSize: 16,
         fontWeight: 'bold',
     },
