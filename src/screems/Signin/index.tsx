@@ -23,8 +23,11 @@ export default function SignIn() {
             <StatusBar backgroundColor={'#ed145b'} />
             <View style={styles.container}>
                 <Text style={styles.title}>Fiap</Text>
-                <TextInput />
-                <TextInput />
+                <TextInput
+                    placeholder="Digite seu e-mail"
+                    keyboardType="email-address"
+                />
+                <TextInput placeholder="digite sua senha" secureTextEntry />
                 <TouchableOpacity activeOpacity={0.7} style={styles.button}>
                     <Text style={styles.buttonText}>Entrar</Text>
                 </TouchableOpacity>
@@ -44,9 +47,10 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 42,
         fontWeight: 'bold',
+        marginBottom: 24,
     },
     button: {
-        backgroundColor: '#FFFFFF80',
+        backgroundColor: '#FFF',
         padding: 10,
         width: Dimensions.get('screen').width - 80,
         justifyContent: 'center',

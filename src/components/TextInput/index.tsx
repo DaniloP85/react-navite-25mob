@@ -1,13 +1,37 @@
 import React from 'react';
-import {Text, TextInput as RNTextInput, View} from 'react-native';
+import {
+    Text,
+    TextInput as RNTextInput,
+    View,
+    StyleSheet,
+    Dimensions,
+    TextInputProps,
+} from 'react-native';
 
-export default function TextInput() {
+interface CustomTextInputProps extends TextInputProps {
+    error?: string;
+}
+
+export default function TextInput({error, ...props}: CustomTextInputProps) {
     return (
-        <View>
-            <RNTextInput />
-            <View>
-                <Text>Test</Text>
-            </View>
+        <View style={styles.container}>
+            <RNTextInput style={styles.TextInput} {...props} />
+            {error && <Text style={styles.errorText}>Error</Text>}
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        marginBottom: 20,
+    },
+    TextInput: {
+        backgroundColor: '#FFFFFF80',
+        padding: 10,
+        width: Dimensions.get('screen').width - 80,
+        borderRadius: 8,
+    },
+    errorText: {
+        color: '#fff',
+    },
+});
