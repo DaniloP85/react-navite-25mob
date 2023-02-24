@@ -7,16 +7,16 @@ import {
     TouchableOpacity,
     Keyboard,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+// import {useNavigation} from '@react-navigation/native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
-import {StackProps} from '../../routes';
+// import {StackProps} from '../../routes';
 
 import TextInput from '../../components/TextInput';
 
 export default function SignIn() {
-    const navigation = useNavigation<StackProps>();
+    // const navigation = useNavigation<StackProps>();
 
     const initialValues = {email: '', pass: ''};
 
